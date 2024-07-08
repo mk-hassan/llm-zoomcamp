@@ -1,4 +1,4 @@
-# Saturn platform
+# Saturn instance setup
 
 Thankfully, on this module we were provided with a free 15h use for and instance hosted by [Saturn Cloud](https://saturncloud.io/). This free credit allows us to run open-source LLMs fast and efficient because of the existance of a GPU.
 
