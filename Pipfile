@@ -8,6 +8,12 @@ transformers = "*"
 accelerate = "*"
 bitsandbytes = "*"
 sentencepiece = "*"
+openai = "*"
+tqdm = "*"
+elasticsearch = "*"
+pandas = "*"
+scikit-learn = "*"
+ipywidgets = "*"
 
 [dev-packages]
 
