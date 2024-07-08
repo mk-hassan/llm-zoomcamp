@@ -14,8 +14,10 @@ elasticsearch = "*"
 pandas = "*"
 scikit-learn = "*"
 ipywidgets = "*"
+tiktoken = "*"
 
 [dev-packages]
+ipykernel = "*"
 
 [requires]
 python_version = "3.10"
