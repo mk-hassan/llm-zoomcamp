@@ -107,7 +107,7 @@ docker build -t ollama-gemma2b .
 And run it:
 
 ```bash
-docker run -it --rm -p 11434:11434 ollama-gemma2b
+docker run --name ollama -it --rm -p 11434:11434 ollama-gemma2b
 ```
 
 We can connect to it using the OpenAI client
