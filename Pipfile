@@ -16,6 +16,7 @@ scikit-learn = "*"
 ipywidgets = "*"
 tiktoken = "*"
 dlt = {extras = ["duckdb"], version = "*"}
+streamlit = "*"
 
 [dev-packages]
 ipykernel = "*"
