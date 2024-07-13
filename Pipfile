@@ -15,6 +15,7 @@ pandas = "*"
 scikit-learn = "*"
 ipywidgets = "*"
 tiktoken = "*"
+dlt = {extras = ["duckdb"], version = "*"}
 
 [dev-packages]
 ipykernel = "*"
