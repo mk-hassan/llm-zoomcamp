@@ -6,7 +6,6 @@ name = "pypi"
 [packages]
 transformers = "*"
 accelerate = "*"
-bitsandbytes = "*"
 sentencepiece = "*"
 openai = "*"
 tqdm = "*"
@@ -17,6 +16,7 @@ ipywidgets = "*"
 tiktoken = "*"
 dlt = {extras = ["duckdb"], version = "*"}
 streamlit = "*"
+sentence-transformers = "==2.7.0"
 
 [dev-packages]
 ipykernel = "*"
