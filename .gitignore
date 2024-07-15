@@ -168,3 +168,6 @@ ollama_files
 
 # DBs
 *.duckdb
+
+# large files
+paraphrase-albert-small-v2_based_embeddings.json
