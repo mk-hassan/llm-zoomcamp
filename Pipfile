@@ -14,9 +14,9 @@ pandas = "*"
 scikit-learn = "*"
 ipywidgets = "*"
 tiktoken = "*"
-dlt = {extras = ["duckdb"], version = "*"}
 streamlit = "*"
 sentence-transformers = "==2.7.0"
+dlt = {extras = ["lancedb"], version = "*"}
 
 [dev-packages]
 ipykernel = "*"
