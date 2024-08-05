@@ -17,6 +17,7 @@ tiktoken = "*"
 streamlit = "*"
 sentence-transformers = "==2.7.0"
 dlt = {extras = ["lancedb"], version = "*"}
+rouge = "*"
 
 [dev-packages]
 ipykernel = "*"
