@@ -1,0 +1,178 @@
+blocks:
+- all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    file_source:
+      path: rager/data_loaders/meteoric_quasar.py
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  groups:
+  - ingest
+  has_callback: false
+  language: python
+  name: Meteoric quasar
+  retry_config: null
+  status: not_executed
+  timeout: null
+  type: data_loader
+  upstream_blocks: []
+  uuid: meteoric_quasar
+- all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    file_source:
+      path: rager/transformers/stygian_dynamo.py
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  groups:
+  - chunking
+  has_callback: false
+  language: python
+  name: Stygian dynamo
+  retry_config: null
+  status: not_executed
+  timeout: null
+  type: transformer
+  upstream_blocks: []
+  uuid: stygian_dynamo
+- all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    file_source:
+      path: rager/transformers/nebulous_artifact.py
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  groups:
+  - tokenization
+  has_callback: false
+  language: python
+  name: Nebulous artifact
+  retry_config: null
+  status: not_executed
+  timeout: null
+  type: transformer
+  upstream_blocks: []
+  uuid: nebulous_artifact
+- all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    file_source:
+      path: rager/transformers/radiant_exodus.py
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  groups:
+  - embed
+  has_callback: false
+  language: python
+  name: Radiant exodus
+  retry_config: null
+  status: not_executed
+  timeout: null
+  type: transformer
+  upstream_blocks: []
+  uuid: radiant_exodus
+- all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    file:
+      content: null
+      extension: py
+      language: python
+      modified_timestamp: 1724096334
+      name: electrifying_quantum.py
+      output: null
+      path: /home/src/llm/rager/data_exporters/electrifying_quantum.py
+      relative_path: llm/rager/data_exporters/electrifying_quantum.py
+      size: 2290
+    file_source:
+      path: rager/data_exporters/electrifying_quantum.py
+    templates:
+      elasticsearch:
+        variables:
+          connection_string: http://rag-project-elasticsearch-1:9200
+          dimensions: null
+          index_name: documents
+          number_of_replicas: 0
+          number_of_shards: 1
+          vector_column_name: embedding
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  groups:
+  - vector_database
+  has_callback: false
+  language: python
+  name: Electrifying quantum
+  retry_config: null
+  status: not_executed
+  timeout: null
+  type: data_exporter
+  upstream_blocks: []
+  uuid: electrifying_quantum
+- all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    file:
+      content: null
+      extension: py
+      language: python
+      modified_timestamp: 1724103465
+      name: wondrous_paragon.py
+      output: null
+      path: /home/src/llm/rager/data_loaders/wondrous_paragon.py
+      relative_path: llm/rager/data_loaders/wondrous_paragon.py
+      size: 1493
+    file_source:
+      path: rager/data_loaders/wondrous_paragon.py
+    templates:
+      elasticsearch:
+        variables:
+          chunk_column: chunk
+          connection_string: http://rag-project-elasticsearch-1:9200
+          index_name: documents
+          vector_column_name: embedding
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  groups:
+  - iterative_retrieval
+  has_callback: false
+  language: python
+  name: Wondrous paragon
+  retry_config: null
+  status: not_executed
+  timeout: null
+  type: data_loader
+  upstream_blocks: []
+  uuid: wondrous_paragon
+cache_block_output_in_memory: false
+callbacks: []
+concurrency_config: {}
+conditionals: []
+created_at: '2024-08-19 15:40:45.115608+00:00'
+data_integration: null
+description: null
+execution_framework: rag
+executor_config: {}
+executor_count: 1
+executor_type: null
+extensions: {}
+name: Effulgent omega
+notification_config: {}
+remote_variables_dir: null
+retry_config: {}
+run_pipeline_in_one_process: false
+settings:
+  triggers: null
+spark_config: {}
+tags: []
+type: python
+uuid: effulgent_omega
+variables:
+  index_name: documents_20240819_3510
+variables_dir: /home/src/mage_data/rager
+widgets: []
