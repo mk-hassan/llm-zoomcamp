@@ -13,6 +13,7 @@ openai = "*"
 pandas = "*"
 scikit-learn = "*"
 tiktoken = "*"
+qdrant-client = {extras = ["fastembed"], version = ">=1.14.2"}
 
 [dev-packages]
 

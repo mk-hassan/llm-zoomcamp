@@ -173,3 +173,4 @@ ollama_files
 paraphrase-albert-small-v2_based_embeddings.json
 
 01. Intro/documents.json
+qdrant_storage
