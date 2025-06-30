@@ -1,3 +1,8 @@
+"""
+Simple implementation for a *Knowledge Base* using basic vector searching algorithms
+The search results are used as the *Context* section of the PROMPT sent to the LLM to generate response to the user's query 
+"""
+
 import pandas as pd
 
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -36,7 +41,7 @@ class Index:
         self.text_matrices = {}
         self.docs = []
 
-    def fit(self, docs):
+    def fit(self, docs: list[dict]):
         """
         Fits the index with the provided documents.
 

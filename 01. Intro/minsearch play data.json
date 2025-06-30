@@ -1,0 +1,32 @@
+[
+    {
+        "title": "The Rise of Artificial Intelligence",
+        "description": "AI is transforming the world across various industries including healthcare, finance, and transportation.",
+        "category": "technology",
+        "author": "Alice"
+    },
+    {
+        "title": "Healthy Eating Habits for 2025",
+        "description": "Eating a balanced diet is crucial for maintaining good health and energy levels throughout the day.",
+        "category": "health",
+        "author": "Bob"
+    },
+    {
+        "title": "The Future of Electric Vehicles",
+        "description": "EVs are becoming more popular as governments push for greener transportation solutions.",
+        "category": "automotive",
+        "author": "Charlie"
+    },
+    {
+        "title": "Investing in the Stock Market",
+        "description": "Learn the basics of investing, market trends, and building a diverse portfolio.",
+        "category": "finance",
+        "author": "Alice"
+    },
+    {
+        "title": "Mental Health Awareness",
+        "description": "Mental health is just as important as physical health and should not be overlooked.",
+        "category": "health",
+        "author": "Dana"
+    }
+]

@@ -171,3 +171,5 @@ ollama_files
 
 # large files
 paraphrase-albert-small-v2_based_embeddings.json
+
+01. Intro/documents.json

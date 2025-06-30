@@ -11,6 +11,8 @@ elasticsearch = "*"
 notebook = "==7.1.2"
 openai = "*"
 pandas = "*"
+scikit-learn = "*"
+tiktoken = "*"
 
 [dev-packages]
 

@@ -4,19 +4,17 @@
 * 2. [What is RAG?](#WhatisRAG)
 * 3. [System Shape](#SystemShape)
 * 4. [Environment preparation](#Environmentpreparation)
-	* 4.1. [Python and pipenv installtions](#Pythonandpipenvinstalltions)
-	* 4.2. [Choosing DB](#ChoosingDB)
-	* 4.3. [Choosing LLM provider](#ChoosingLLMprovider)
+	* 4.1. [Choosing DB](#ChoosingDB)
+	* 4.2. [Choosing LLM provider](#ChoosingLLMprovider)
 * 5. [Establishing QA RAG System](#EstablishingQARAGSystem)
-	* 5.1. [Insalling packages we need](#Insallingpackagesweneed)
-	* 5.2. [Configuring environment variables needed for GROQ credentials](#ConfiguringenvironmentvariablesneededforGROQcredentials)
-	* 5.3. [preparing Docs](#preparingDocs)
-	* 5.4. [Start elasticsearch server](#Startelasticsearchserver)
-* 6. [Loading DOCs to elasticsearch](#LoadingDOCstoelasticsearch)
-* 7. [Building R - A - G](#BuildingR-A-G)
-	* 7.1. [R - Retrieving the most related documennt to certain query form elasticsearch](#R-Retrievingthemostrelateddocumennttocertainqueryformelasticsearch)
-	* 7.2. [Preparing the prompt](#Preparingtheprompt)
-	* 7.3. [G - send the query after to the LLM and the answer will be A - Augmented by the docs content](#G-sendthequeryaftertotheLLMandtheanswerwillbeA-Augmentedbythedocscontent)
+	* 5.1. [Configuring environment variables needed for GROQ credentials](#ConfiguringenvironmentvariablesneededforGROQcredentials)
+	* 5.2. [preparing Docs](#preparingDocs)
+	* 5.3. [Start elasticsearch server](#Startelasticsearchserver)
+    * 5.4 [Loading DOCs to elasticsearch](#LoadingDOCstoelasticsearch)
+* 6. [Building R - A - G](#BuildingR-A-G)
+	* 6.1. [R - Retrieving the most related documennt to certain query form elasticsearch](#R-Retrievingthemostrelateddocumennttocertainqueryformelasticsearch)
+	* 6.2. [Preparing the prompt](#Preparingtheprompt)
+	* 6.3. [G - send the query after to the LLM and the answer will be A - Augmented by the docs content](#G-sendthequeryaftertotheLLMandtheanswerwillbeA-Augmentedbythedocscontent)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -27,17 +25,21 @@
 
 ##  1. <a name='Intro'></a>Intro
 
-This module is discussing what is RAG stands for, and how build a simple RAG pipeline to answer questions.
-![RAG](./assets/sketch.png)
+This module is discussing what is ***RAG*** stands for, and how build a simple RAG pipeline to answer questions.
+![RAG](./assets/RAG%20framework.png)
 
 ##  2. <a name='WhatisRAG'></a>What is RAG?
 
-RAG stands for retrival Augmented Generation. Maybe Generation is the most intuitive word, LLMs generate some content.
-But think about what if I'm speialized in some specific field, so what if we let the LLM to have more specific info about the content to be generated, `strenthen` its knowledge about something, `augmenting` its knowledge base with some info `retrieved` from other `knowledge source`.
+RAG stands for **Retrival Augmented Generation**. Maybe Generation is the most intuitive word, LLMs generate some content.
 
-`knowledge source`: A batabase contains some documents represents our knowledge. The database can be a search engine like google from which we get info and feeding out LLM with those info.\
+But think about what if I'm speialized in some specific field, so what if we let the LLM to have more specific info about the content to be generated, `strenthen` its knowledge about something, `augmenting` its knowledge base with some info `retrieved` from other `knowledge source`. **Augmenting** the **LLM Generation** by providing **Retrieved Context**.
+
+`knowledge base`: A source contains some information represents our knowledge. The database can be a search engine like google from which we get info and feeding out LLM with those info.\
 `retrieved`: If we asked the database/search engine a question, we get the documents related to that question. \
-`augmenting`: Giving those docs to the LLM, and asking the same question we asked before to `knowledge source` and get answers tailored to those docs.
+`augmenting`: Giving those docs to the LLM as the Context used in generating the response, and asking the same question we asked before to `knowledge source` and get answers tailored to those docs.
+
+> [!TIP]
+> LLM should provide response (answers) depending on the provided context
 
 ![Searching online](./assets/good%20RAG.png)
 > Notice this simple RAG system, asking the question online(Database), retrieve info, feeding ChatGPT with those retieved info and then answer our question based on those info.
@@ -52,11 +54,11 @@ Building a system that can answer students' questions on a specific course.
 
 The Goal to build a system does the following steps:
 1. Ask question to DB and get relative docs.
-2. Build query using those docs and send this query to a LLM.
+2. Build prompt using those docs + query to a LLM.
 3. Get the answer from the LLM.
 
 ```python
-def qa_rag_system(query):
+def rag_workflow(query, search_results):
     search_results = elastic_search(query)
     prompt = build_prompt(query, search_results)
     answer = llm(prompt)
@@ -65,50 +67,33 @@ def qa_rag_system(query):
 
 ##  4. <a name='Environmentpreparation'></a>Environment preparation
 
-1. installing [python](https://www.python.org/downloads/)
-2. installing [pipenv](https://pipenv.pypa.io/en/latest/)
-  ```python
-  # In project folder
-  pip install pipenv
-  ```
-3. Choosing your DB that contains knowledge
-4. Choosing LLM provider.
+1. [install pipenv](https://pipenv.pypa.io/en/latest/installation.html) (virtual environment tool)
+2. create new virtual environment
+```bash
+pipenv --python <prefered-python-version>
+pipenv install --dev
+```
 
-> [!NOTE]
-> In my case, I used github codespaces which provides you with a VM containing all tools you will need. Developing RAG applications locally is costy and requires lots of hardware resources.
+###  4.1. <a name='ChoosingDB'></a>Choosing DB
 
-###  4.1. <a name='Pythonandpipenvinstalltions'></a>Python and pipenv installtions
-
-If using github codespaces you will find python pre-installed but not pipenv. Pipenv is a Python virtualenv management tool used to separate your project dependencies from the rest of the system. In github codespaces you will really found separate environnments really useful as you are already working on a whole separate system from your computer.
-
-###  4.2. <a name='ChoosingDB'></a>Choosing DB
-
-What we need is a `Data Base` that stores our documents, and when asking it some question it returns the most precise documents it already stores (It's not the phase where we generating answers, it's about returning the exact docs to give to the LLM and generate answer).
+What we need is a `DataBase` that stores our documents, and when asking it some question it returns the most precise documents it already stores (It's not the phase where we generating answers, it's about returning the information to give to the LLM to generate answer based on them).
 
 The best choise for such case is to use [`elastic search`](https://www.elastic.co/docs), which is a nosql database used to make advanced search on the docs it contains. It's working like a search engine.
 
 Or if you are can even build your own simple `elastic search`. To do so follow this [lesson](https://github.com/alexeygrigorev/build-your-own-search-engine) using TF-IDF and cosine similarity to retrieve relevant info.
 
-###  4.3. <a name='ChoosingLLMprovider'></a>Choosing LLM provider
+> [!NOTE]
+> There are lots of choices from the minsearch engine using sklearn we built, to a vector database like Qdrant or even online search.
 
-There's lots of LLMs. You may use OpenAI chatgpt platform. all you need is to make [`API key`](https://platform.openai.com/api-keys) and use it to communicate with your prefered openAI model. I used a free open-source LLM called `LLaMA3 8b` developed by meta provided by a plcatform called [groq](https://groq.com/). You also need to make an [`API key`](https://console.groq.com/keys) and then start communicating with the preferred model.
+###  4.2. <a name='ChoosingLLMprovider'></a>Choosing LLM provider
 
-Many other free LLMs can be found on this [document](https://github.com/DataTalksClub/llm-zoomcamp/blob/main/01-intro/open-ai-alternatives.md).
+There's lots of LLMs. You may use OpenAI chatgpt platform. all you need is to make [`API key`](https://platform.openai.com/api-keys) and use it to communicate with your prefered openAI model. I used a free open-source LLM called `LLaMA3 8b` developed by meta provided by a platform called [groq](https://groq.com/). You also need to make an [`API key`](https://console.groq.com/keys) and then start communicating with the preferred model.
 
-##  5. <a name='EstablishingQARAGSystem'></a>Establishing QA RAG System
+Many other free LLMs can be found on this [document](https://github.com/DataTalksClub/llm-zoomcamp/blob/main/awesome-llms.md#openai-api-alternatives)
 
-###  5.1. <a name='Insallingpackagesweneed'></a>Insalling packages we need
+##  5. <a name='EstablishingQARAGSystem'></a>Prepare data and the required environment configs
 
-```shell
-pip install requests groq tqdm elasticsearch titoken notebook==7.1.2
-
-# groq is the package used to communicate with (LLaMA3 8b) model.
-# tqdm is a progress bar package, used to visualize looping progress.
-# elasticsearch is the package used to communicate with elsaticsearch DB.
-# tiktoken is an open source package used by openAI models to calculate the number of tokens in the input and the generated output.
-```
-
-###  5.2. <a name='ConfiguringenvironmentvariablesneededforGROQcredentials'></a>Configuring environment variables needed for GROQ credentials
+###  5.1. <a name='ConfiguringenvironmentvariablesneededforGROQcredentials'></a>Configuring environment variables needed for GROQ credentials
 
 Adding `GROQ_API_KEY` which is used by groq package to authenticate your connection to `groq_api`.
 
@@ -116,14 +101,16 @@ Adding `GROQ_API_KEY` which is used by groq package to authenticate your connect
 export GROQ_API_KEY='{API_KEY}' # It's really secret and you need to hide it.
 ```
 
-###  5.3. <a name='preparingDocs'></a>preparing Docs
-Now you should prepare the Documents you want to store on elasticsearch and use it later as you knowledge base. So after storing those docs and then you ask elasticsearch a question, you got the most relatice documents to your ansewe.
+###  5.2. <a name='preparingDocs'></a>preparing Docs
+Now you should prepare the Documents you want to store on elasticsearch and use it later as you knowledge base. So after storing those docs and then you ask elasticsearch a question, you got the most related documents.
 
 The docs used during this module is the FAQ of Zoomcamp courses ([DE Zoomcamp](https://docs.google.com/document/d/19bnYs80DwuUimHM65UV3sylsCn2j1vziPOwzBwQrebw/edit), [ML Zoomcamp](https://docs.google.com/document/d/1LpPanc33QJJ6BSsyxVg-pWNMplal84TdZtq10naIhD8/edit), [MLOps Zoomcamp](https://docs.google.com/document/d/12TlBfhIiKtyBv8RnsoJR6F72bkPDGEvPOItJIxaEzE0/edit)).
 
 To download those docs and converting them to `Json` format, use the following [python notebook](https://github.com/DataTalksClub/llm-zoomcamp/blob/main/01-intro/parse-faq.ipynb).
 
-###  5.4. <a name='Startelasticsearchserver'></a>Start elasticsearch server
+Or Download the data in json format using ths [link](https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-intro/documents.json)
+
+###  5.3. <a name='Startelasticsearchserver'></a>Start elasticsearch server
 
 using Docker which is pre-installed on github code spaces, you can start an isolated elasticserch server that contains your Docs.
 ```bash
@@ -163,7 +150,7 @@ You should get something like this
 }
 ```
 
-##  6. <a name='LoadingDOCstoelasticsearch'></a>Loading DOCs to elasticsearch
+###  5.4 <a name='LoadingDOCstoelasticsearch'></a>Loading DOCs to elasticsearch
 
 1. start elasticsearch connection
 ```python
@@ -173,7 +160,7 @@ es_client = Elasticsearch('http://localhost:9200')
 
 ```python
 # think about it as a relation with 4 columns and the primary key called "course" by which you group the docs.
-# when searching, elastic search searches the oother 2 columns for similarity and return the most similar ones.
+# when searching, elastic search searches the other 2 columns for similarity and return the most similar ones.
 index_settings = {
     "settings": {
         "number_of_shards": 1,
@@ -189,7 +176,7 @@ index_settings = {
     }
 }
 
-index_name = "course-questions"
+index_name = "course-questions" # table name
 
 es_client.indices.create(index=index_name, body=index_settings)
 ```
@@ -199,11 +186,11 @@ for doc in tqdm(documents):
     es_client.index(index=index_name, document=doc)
 ```
 
-Now all setup is done, we have the knowledge base (DB) so start RAG.
+Now all setup is done, we have the knowledge base so start Retrive data and Augment the LLM Generation.
 
-##  7. <a name='BuildingR-A-G'></a>Building R - A - G
+##  6. <a name='BuildingR-A-G'></a>Building R - A - G
 
-###  7.1. <a name='R-Retrievingthemostrelateddocumennttocertainqueryformelasticsearch'></a>R - Retrieving the most related documennt to certain query form elasticsearch
+###  6.1. <a name='R-Retrievingthemostrelateddocumennttocertainqueryformelasticsearch'></a>R - Retrieving the most related documennt to certain query form elasticsearch
 
 ```python
 def filter_search(query, size=5, search_words=[]):
@@ -231,7 +218,7 @@ def filter_search(query, size=5, search_words=[]):
     return es_client.search(index=index_name, body=search_query)
 ```
 
-###  7.2. <a name='Preparingtheprompt'></a>Preparing the prompt
+###  6.2. <a name='Preparingtheprompt'></a>Preparing the prompt
 
 ```python
 context_template = """
@@ -258,7 +245,7 @@ CONTEXT:
 prompt = prompt_template.format(question=query, context=context).strip()
 ```
 
-###  7.3. <a name='G-sendthequeryaftertotheLLMandtheanswerwillbeA-Augmentedbythedocscontent'></a>G - send the query after to the LLM and the answer will be A - Augmented by the docs content
+###  6.3. <a name='G-sendthequeryaftertotheLLMandtheanswerwillbeA-Augmentedbythedocscontent'></a>G - send the query after to the LLM and the answer will be A - Augmented by the docs content
 
 ```python
 def ask_groq(prompt, model="mixtral-8x7b-32768"):
