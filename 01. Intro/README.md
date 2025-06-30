@@ -269,4 +269,4 @@ answer = ask_groq(prompt)
 ```
 
 > [!NOTE]
-> I wrote this file to document what I've learnt 2 weeks ago and to make it easy to remember what you forget as fast as possible by taking a glance on your own words.
+> Elatic serach by default returns the most relative documents to the query (the highest scored documents).

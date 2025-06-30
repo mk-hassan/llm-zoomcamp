@@ -43,6 +43,47 @@ v_q
 $$
 
 2. Perform dot prodcut the query vector with docs vectors (consine similarity) 
+$$
+\vec{v}_q = 
+\left\{
+\begin{array}{c}
+q_1 \\
+q_2 \\
+\vdots \\
+q_n \\
+\end{array}
+\right\}
+$$
+
+And the document vectors be:
+
+$$
+\vec{v}_{\text{docs}} =
+\left[
+\begin{array}{c}
+\vec{v}_1^\top \\
+\vec{v}_2^\top \\
+\vdots \\
+\vec{v}_m^\top \\
+\end{array}
+\right]
+=
+\left[
+\begin{array}{cccc}
+v_{11} & v_{12} & \cdots & v_{1n} \\
+v_{21} & v_{22} & \cdots & v_{2n} \\
+\vdots & \vdots & \ddots & \vdots \\
+v_{m1} & v_{m2} & \cdots & v_{mn} \\
+\end{array}
+\right]
+$$
+
+Then the cosine similarity scores between the query and each document are:
+
+$$
+\text{scores} = \text{cosine\_similarity}(\vec{v}_q, \vec{v}_{\text{docs}}) =
+\frac{ \vec{v}_{\text{docs}} \cdot \vec{v}_q }{ \|\vec{v}_{\text{docs}}\| \cdot \|\vec{v}_q\| }
+$$
 3. get the top k scores positions and these are the most relatice documents 
 
 > [!NOTE]
@@ -51,5 +92,10 @@ $$
 > Then we searching the docs you are summing up the scores prodced from each vectorizer after adding weight to each score separatly.
 >
 > Think about it you have multiple docs lists docs1 = [], docs2 = []. You perfrom consine similarity on both them sum the scores and get the top k scores.
+>
+> $$
+\text{scores} = \sum_{\text{text\_fields}} \cos\left( \vec{v}_q, \vec{v}_{f} \right) = 
+\sum_{\text{text\_fields}} \frac{ \vec{v}_{f} \cdot \vec{v}_q }{ \|\vec{v}_{f}\| \cdot \|\vec{v}_q\| }
+$$
 
 
